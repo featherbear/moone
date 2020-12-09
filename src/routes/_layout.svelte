@@ -1,61 +1,22 @@
 <script lang="ts">
+	import 'cirrus-ui'
 </script>
 
 <style lang="scss" global>
-  // @import 'cirrus-ui/src/core/theme.scss';
-  body {
-    margin: 0;
-    font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
-      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #333;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 0 0 0.5em 0;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  h1 {
-    font-size: 2em;
-  }
-
-  a {
-    color: inherit;
-  }
-
-  code {
-    font-family: menlo, inconsolata, monospace;
-    font-size: calc(1em - 2px);
-    color: #555;
-    background-color: #f0f0f0;
-    padding: 0.2em 0.4em;
-    border-radius: 2px;
-  }
-
-  @media (min-width: 400px) {
-    body {
-      font-size: 16px;
-    }
-  }
-
+  html, body, #app {
+		height: 100vh;
+	}
+	
   main {
     position: relative;
     max-width: 56em;
-    background-color: white;
     padding: 2em;
     margin: 0 auto;
-    box-sizing: border-box;
+		box-sizing: border-box;
+		height: 100%;
   }
 </style>
 
-<main>
+<main class="bg-gray-900 text-gray-600">
   <slot />
 </main>

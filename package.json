@@ -32,6 +32,7 @@
     "@types/node": "^14.11.1",
     "@types/polka": "^0.5.1",
     "cirrus-ui": "^0.6.0",
+    "dayjs": "^1.9.7",
     "postcss": "^8.2.1",
     "rollup": "^2.3.4",
     "rollup-plugin-svelte": "^6.0.0",
