@@ -4,7 +4,9 @@
 	export let segment: string;
 </script>
 
-<style>
+<style lang="scss">
+	// @import 'cirrus-ui/src/core/theme.scss';
+
 	main {
 		position: relative;
 		max-width: 56em;
