@@ -1,0 +1,12 @@
+import type { ServiceSpecifier } from '../components/TfNSW/Types'
+
+export default [
+  {
+    // Off to UNSW boyzz
+    stopID: "201715",
+    specifier: { route: ["370"] },
+  }
+] as Array<{
+  stopID: string;
+  specifier?: ServiceSpecifier;
+}>
