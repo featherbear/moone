@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import dataStore from '../../dataStore'
+import dataStore from '../../serverDataStore'
 
 import { minuteDifference } from './Util'
 import type { ServiceInformation, ServiceSpecifier } from './Types'

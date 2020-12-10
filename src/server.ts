@@ -1,4 +1,4 @@
-import dataStore from './dataStore'
+import dataStore from './serverDataStore'
 
 import sirv from 'sirv';
 import polka from 'polka';
