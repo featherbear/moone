@@ -1,7 +1,9 @@
 import fetch from 'node-fetch'
 import dataStore from '../../dataStore'
 
+import { minuteDifference } from './Util'
 import type { ServiceInformation, ServiceSpecifier } from './Types'
+
 
 /**
  * Find upcoming services given a stop ID
@@ -79,7 +81,7 @@ export async function findServices(stopID: string, specifier?: ServiceSpecifier)
         routeDescription,
         departureTimePlanned,
         realtime: true,
-        delay: new Date(departureTimeEstimated.valueOf() - departureTimePlanned.valueOf()).getMinutes(),
+        delay: minuteDifference(departureTimeEstimated, departureTimePlanned),
         departureTimeEstimated
       })
     } else {
