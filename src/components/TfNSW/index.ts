@@ -1,32 +1,14 @@
 import fetch from 'node-fetch'
 import dataStore from '../../dataStore'
 
-/**
- * Either `to: string | string[]`  
- * OR `route: string | string[]`
- */
-type serviceSpecifier = {
-  /**
-   * Destination name, or array of destination names
-   */
-  to: string | string[]
-  route?: never
-} | {
-  /**
-   * Route name, or array of route names
-   */
-  route: string | string[]
-  to?: never
-}
+import type { ServiceInformation, ServiceSpecifier } from './Types'
 
 /**
  * Find upcoming services given a stop ID
  * @param stopID ID of the bus stop / train station / etc ...
  * @param specifier Optional criteria for picking specific services from the current stop
- * 
- * TODO: Make it actually return something
  */
-export async function findServices(stopID: string, specifier?: serviceSpecifier) {
+export async function findServices(stopID: string, specifier?: ServiceSpecifier): Promise<ServiceInformation[]> {
   let result = await fetch(`https://api.transport.nsw.gov.au/v1/tp/departure_mon?outputFormat=rapidJSON&coordOutputFormat=EPSG%3A4326&mode=direct&type_dm=stop&name_dm=${stopID}&departureMonitorMacro=true&TfNSWDM=true&version=10.2.1.42`, {
     headers: {
       Accept: 'application/json',
@@ -35,8 +17,7 @@ export async function findServices(stopID: string, specifier?: serviceSpecifier)
   }).then(r => r.json())
 
   if (typeof result['ErrorDetails'] !== 'undefined') {
-    console.error(result['ErrorDetails'])
-    throw new Error()
+    throw new Error(result['ErrorDetails'])
   }
 
   let { stopEvents: services }: { stopEvents: Array<any> } = result
@@ -60,16 +41,18 @@ export async function findServices(stopID: string, specifier?: serviceSpecifier)
 
   if (!services) {
     // ie stop doesn't exist, or there really aren't any routes
-    console.warn('No routes found')
-    return
+    return []
   }
 
+  let results: ServiceInformation[] = []
   for (let service of services) {
+    if (service['isCancelled']) continue
+
     const {
       location: { name: stopName },
       isRealtimeControlled,
-      departureTimePlanned,
-      departureTimeEstimated,
+      departureTimePlanned: _departureTimePlanned,
+      departureTimeEstimated: _departureTimeEstimated,
       transportation: { number: routeNumber, description: routeDescription }
     }: {
       /**
@@ -83,30 +66,33 @@ export async function findServices(stopID: string, specifier?: serviceSpecifier)
     }
       = service
 
+    let departureTimePlanned = new Date(_departureTimePlanned)
+    let departureTimeEstimated = (_departureTimeEstimated && new Date(_departureTimeEstimated)) || undefined
 
     // Skip if service has already left
-    if (
-      ((departureTimeEstimated && new Date(departureTimeEstimated)) ||
-        new Date(departureTimePlanned)) < new Date()
-    )
-      continue
+    if ((departureTimeEstimated || departureTimePlanned) < new Date()) continue
 
     if (isRealtimeControlled) {
-      let difference = new Date(
-        new Date(departureTimeEstimated).valueOf() - new Date(departureTimePlanned).valueOf()
-      ).getMinutes()
-      if (difference) {
-        console.log(
-          `${routeDescription} service (${routeNumber}) is ${difference} min ${difference > 0 ? 'late' : 'early'
-          }`
-        )
-      } else {
-        console.log(`${routeDescription} service (${routeNumber}) is on time`)
-      }
+      results.push({
+        stopName,
+        routeNumber,
+        routeDescription,
+        departureTimePlanned,
+        realtime: true,
+        delay: new Date(departureTimeEstimated.valueOf() - departureTimePlanned.valueOf()).getMinutes(),
+        departureTimeEstimated
+      })
     } else {
-      // console.log(`${routeDescription} service (${routeNumber}) has no real-time data`)
+      results.push({
+        stopName,
+        routeNumber,
+        routeDescription,
+        departureTimePlanned,
+        realtime: false
+      })
     }
   }
+  return results;
 }
 
 

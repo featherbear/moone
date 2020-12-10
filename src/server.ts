@@ -12,6 +12,7 @@ polka() // You can also use Express
 	.use(
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
+		require('body-parser').json(),
 		sapper.middleware()
 	)
 	.listen(PORT, err => {
