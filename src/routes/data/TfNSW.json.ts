@@ -1,6 +1,14 @@
 import { findServices } from "../../components/TfNSW/index"
 import type { ServiceSpecifier, ServiceInformation } from "../../components/TfNSW/Types"
 
+/**
+ * Concurrently execute a function on a set of `items`, at most `concurrency` at time.  
+ * Results maintain item order
+ * 
+ * @param items List of items
+ * @param processor Function to perform on the item
+ * @param concurrency (default = 5) Maximum number of active processors
+ */
 async function process<T>(items: any[], processor: (data: any) => Promise<T> | T, concurrency: number = 5): Promise<T[]> {
   let queue = []
   let results = []
