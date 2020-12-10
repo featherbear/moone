@@ -1,17 +1,10 @@
-<script context="module">
-  export async function preload(page, session) {}
-</script>
-
 <script lang="ts">
   import Card from "../components/TfNSW/Card.svelte";
-  import ClockProvider from "../components/Clock";
+  import ClockProvider from "../components/Store_DateFmt";
 
   import TfNSWData from "../data/TfNSW";
 
-  import type {
-    ServiceSpecifier,
-    ServiceInformation,
-  } from "../components/TfNSW/Types";
+  import type { ServiceInformation } from "../components/TfNSW/Types";
 
   import { onMount } from "svelte";
 

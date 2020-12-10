@@ -2,12 +2,14 @@
   import type { ServiceInformation } from "./Types";
   import { minuteDifference } from "./Util";
 
+  import DateObj from "../Store_DateObj";
+
   export let data: ServiceInformation;
 </script>
 
 <div class="tile u-items-center">
   <h5 class="mb-0">
-    {minuteDifference(new Date(), data.departureTimeEstimated || data.departureTimePlanned)}
+    {minuteDifference($DateObj, data.departureTimeEstimated || data.departureTimePlanned)}
     min
   </h5>
   <div class="tile__container">
