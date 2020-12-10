@@ -1,4 +1,4 @@
-import { findServices } from "../../components/TfNSW/index"
+import { findServices } from "../../components/TfNSW/Lookup"
 import type { ServiceSpecifier, ServiceInformation } from "../../components/TfNSW/Types"
 
 /**

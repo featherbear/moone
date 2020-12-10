@@ -1,8 +1,9 @@
-export function minuteDifference(from: Date | string, to: Date | string) {
-  if (typeof from === 'string') from = new Date(from)
-  if (typeof to === 'string') to = new Date(to)
+export function minuteDifference(dateA: Date | string, dateB: Date | string) {
+  if (typeof dateA === 'string') dateA = new Date(dateA)
+  if (typeof dateB === 'string') dateB = new Date(dateB)
 
-  let sign = (from < to) ? -1 : 1
-  let minutes = Math.floor((from.valueOf() - to.valueOf()) / 60000);
+  let sign = (dateA < dateB) ? 1 : -1
+  let minutes = Math.floor((dateB.valueOf() - dateA.valueOf()) / 60000);
+
   return minutes * sign;
 }
